@@ -1,0 +1,9 @@
+FROM ghcr.io/graalvm/native-image:ol8-java17-22.3.3
+WORKDIR /tmp
+RUN curl -o gzip.rpm http://mirror.centos.org/centos/7/os/x86_64/Packages/gzip-1.5-10.el7.x86_64.rpm && rpm -i gzip.rpm
+RUN curl -o maven.tar.gz https://dlcdn.apache.org/maven/maven-3/3.9.4/binaries/apache-maven-3.9.4-bin.tar.gz && tar xzvf maven.tar.gz
+COPY . /tmp/api
+RUN export PATH=$PATH:/tmp/apache-maven-3.9.4/bin && \
+    cd api && mvn clean -T10 -Pnative install
+ENTRYPOINT ./api/target/api-1.0.0-SNAPSHOT-runner
+EXPOSE 7000
