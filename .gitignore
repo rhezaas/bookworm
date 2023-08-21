@@ -1,3 +1,9 @@
 .fleet/
 .vscode/
+.next/
+
+bin/
 target/
+node_modules/
+
+.env
