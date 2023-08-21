@@ -1,9 +1,11 @@
-name: ci
+name: Bookworm API CI
 
 on:
   push:
     branches:
       - "main"
+    paths:
+      - "api/**"
 
 jobs:
   docker:
@@ -24,6 +26,9 @@ jobs:
         with:
           context: .
           platforms: linux/amd64,linux/arm64
-          tags: user/app:latest
+          tags: 103.160.62.181/bookworm-api:latest
           secrets: |
-            "github_token=${{ secrets.DB_USER }}"
+            "db_user=${{ secrets.DB_USER }}"
+            "db_pass=${{ secrets.DB_PASS }}"
+            "db_host=${{ secrets.DB_HOST }}"
+            "db_name=${{ secrets.DB_NAME }}"
