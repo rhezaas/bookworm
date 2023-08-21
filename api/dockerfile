@@ -1,0 +1,11 @@
+FROM docker.io/library/golang:alpine AS builder
+WORKDIR /opt/api
+COPY pkg/ pkg/
+COPY go.mod .
+COPY go.sum .
+RUN ls -la && go mod tidy && go build -gcflags="all=-N -l" -o bin/bookworm-api pkg/main/bookworm.go
+
+FROM docker.io/library/alpine:3.17
+COPY --from=builder /opt/api/bin/bookworm-api /usr/bin/api
+ENTRYPOINT ["api"]
+EXPOSE 8000
