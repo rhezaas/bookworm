@@ -1,5 +1,5 @@
 name: Bookworm WEB CI
-run-name: Deploy Web ${{ github.ref_name#refs/heads/web/ }}
+run-name: Deploy Web ${{ github.ref_name#refs/tags/web/ }}
 
 on:
   push:
