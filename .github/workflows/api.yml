@@ -19,7 +19,7 @@ jobs:
         run: |
           docker build \
             -f api/dockerfile \
-            -t ghcr.io/rhezaas/bookworm-api:$GITHUB_REF_NAME \
+            -t ghcr.io/rhezaas/bookworm-api:${{ github.ref_name }} \
             --build-arg API_PORT=${{ vars.API_PORT }} \
             --build-arg DB_USER=${{ secrets.DB_USER }} \
             --build-arg DB_PASS=${{ secrets.DB_PASS }} \
@@ -27,7 +27,7 @@ jobs:
             --build-arg DB_NAME=${{ secrets.DB_NAME }} \
             api/
           echo ${{ secrets.REGISTRY_PASS }} | docker login ghcr.io -u ${{ secrets.REGISTRY_USER }} --password-stdin
-          docker push ghcr.io/rhezaas/bookworm-api:$GITHUB_REF_NAME
+          docker push ghcr.io/rhezaas/bookworm-api:${{ github.ref_name }}
 
       - name: Push to dokku
         uses: dokku/github-action@master
