@@ -19,19 +19,19 @@ jobs:
         run: |
           docker build \
             -f ui/dockerfile \
-            -t ghcr.io/rhezaas/bookworm-${{ github.ref_name }} \
+            -t ghcr.io/rhezaas/bookworm-web:${{ github.ref_name }} \
             --build-arg API_HOST=${{ secrets.API_HOST }} \
             --build-arg WEB_HOST=${{ secrets.WEB_HOST }} \
             ui/
           echo ${{ secrets.REGISTRY_PASS }} | docker login ghcr.io -u ${{ secrets.REGISTRY_USER }} --password-stdin
-          docker push ghcr.io/rhezaas/bookworm-${{ github.ref_name }}
+          docker push ghcr.io/rhezaas/bookworm-web:${{ github.ref_name }}
 
       - name: Push to dokku
         uses: dokku/github-action@master
         with:
-          git_remote_url: 'ssh://dokku@103.160.62.181:22/bookworm-api'
+          git_remote_url: 'ssh://dokku@103.160.62.181:22/bookworm-web'
           ssh_private_key: ${{ secrets.DOKKU_RSA }}
-          deploy_docker_image: ghcr.io/rhezaas/bookworm-${{ github.ref_name }}
+          deploy_docker_image: ghcr.io/rhezaas/bookworm-web:${{ github.ref_name }}
           trace: 1
 
       - name: Cleaner
