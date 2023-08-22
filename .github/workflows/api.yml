@@ -31,3 +31,6 @@ jobs:
             api/
           echo ${{ secrets.REGISTRY_PASS }} | docker login ghcr.io -u ${{ secrets.REGISTRY_USER }} --password-stdin
           docker push ghcr.io/rhezaas/bookworm-api:latest
+
+      - name: Remove untagged images
+        run: docker rmi -f $(docker images -f "dangling=true" -q)
