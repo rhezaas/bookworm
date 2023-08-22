@@ -20,7 +20,7 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          docker build 
+          docker build \
             -f api/dockerfile \
             -t ghcr.io/rhezaas/bookworm-api:latest \
             --build-args API_PORT=${{ secrets.API_PORT }} \
