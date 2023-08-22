@@ -17,5 +17,10 @@ var (
 func init() {
 	// Initial Routesm
 	Server.GET("/", func(ctx *gin.Context) { ctx.JSON(200, gin.H{"message": "Backend is ready"}) })
+	
 	Server.GET("/author", book.GetAuthors)
+	Server.GET("/author/:ID", book.GetAuthorByID)
+	
+	Server.GET("/book", book.GetBooks)
+	Server.GET("/book/:ID", book.GetBookByID)
 }
