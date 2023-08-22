@@ -19,7 +19,7 @@ jobs:
         name: Set Version
         env:
           REF: ${{ github.ref_name }}
-        run: echo "::set-output name=version::${REF##*/}"
+        run: echo "version=${REF##*/}" >> $GITHUB_OUTPUT
 
       - name: Build and push Docker image
         run: |
