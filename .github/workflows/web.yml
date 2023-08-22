@@ -15,23 +15,29 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - id: split
+        name: Set Version
+        env:
+          REF: ${{ github.ref_name }}
+        run: echo "::set-output name=version::${REF##*/}"
+
       - name: Build and push Docker image
         run: |
           docker build \
             -f ui/dockerfile \
-            -t ghcr.io/rhezaas/bookworm-web:${{ github.ref_name }} \
+            -t ghcr.io/rhezaas/bookworm-web:${{ steps.split.outputs.version }} \
             --build-arg API_HOST=${{ secrets.API_HOST }} \
             --build-arg WEB_HOST=${{ secrets.WEB_HOST }} \
             ui/
           echo ${{ secrets.REGISTRY_PASS }} | docker login ghcr.io -u ${{ secrets.REGISTRY_USER }} --password-stdin
-          docker push ghcr.io/rhezaas/bookworm-web:${{ github.ref_name }}
+          docker push ghcr.io/rhezaas/bookworm-web:${{ steps.split.outputs.version }}
 
       - name: Push to dokku
         uses: dokku/github-action@master
         with:
           git_remote_url: 'ssh://dokku@103.160.62.181:22/bookworm-web'
           ssh_private_key: ${{ secrets.DOKKU_RSA }}
-          deploy_docker_image: ghcr.io/rhezaas/bookworm-web:${{ github.ref_name }}
+          deploy_docker_image: ghcr.io/rhezaas/bookworm-web:${{ steps.split.outputs.version }}
           trace: 1
 
       - name: Cleaner
