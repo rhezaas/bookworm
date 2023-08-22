@@ -13,15 +13,19 @@ jobs:
       packages: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v3 
+        uses: actions/checkout@v3
 
-      - name: Build and push Docker image
+      - name: Set Version
         env:
           VERSION: ${{ github.ref_name }}
         run: |
+          echo "version=$VERSION >> $GITHUB_OUTPUT
+
+      - name: Build and push Docker image
+        run: |
           docker build \
             -f api/dockerfile \
-            -t ghcr.io/rhezaas/bookworm-api:$VERSION \
+            -t ghcr.io/rhezaas/bookworm-api:${{ steps.vars.outputs.version }} \
             --build-arg API_PORT=${{ vars.API_PORT }} \
             --build-arg DB_USER=${{ secrets.DB_USER }} \
             --build-arg DB_PASS=${{ secrets.DB_PASS }} \
@@ -29,16 +33,14 @@ jobs:
             --build-arg DB_NAME=${{ secrets.DB_NAME }} \
             api/
           echo ${{ secrets.REGISTRY_PASS }} | docker login ghcr.io -u ${{ secrets.REGISTRY_USER }} --password-stdin
-          docker push ghcr.io/rhezaas/bookworm-api:$VERSION
+          docker push ghcr.io/rhezaas/bookworm-api:${{ steps.vars.outputs.version }}
 
       - name: Push to dokku
         uses: dokku/github-action@master
-        env:
-          VERSION: ${{ github.ref_name }}
         with:
           git_remote_url: 'ssh://dokku@103.160.62.181:22/bookworm-api'
           ssh_private_key: ${{ secrets.DOKKU_RSA }}
-          deploy_docker_image: ghcr.io/rhezaas/bookworm-api:$VERSION
+          deploy_docker_image: ghcr.io/rhezaas/bookworm-api:${{ steps.vars.outputs.version }}
 
       - name: Cleaner
         run: docker system prune --force
