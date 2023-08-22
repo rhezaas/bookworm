@@ -20,6 +20,15 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          docker build -f api/dockerfile -t ghcr.io/rhezaas/bookworm-api:latest api/
+          docker build \
+            -f api/dockerfile \
+            -t ghcr.io/rhezaas/bookworm-api:latest \
+            --build-args \
+              API_PORT=${{ API_PORT }} \
+              DB_USER=${{ DB_USER }} \
+              DB_PASS=${{ DB_PASS }} \
+              DB_HOST=${{ DB_HOST }} \
+              DB_NAME=${{ DB_NAME }} \
+            api/
           echo ${{ secrets.REGISTRY_PASS }} | docker login ghcr.io -u ${{ secrets.REGISTRY_USER }} --password-stdin
           docker push ghcr.io/rhezaas/bookworm-api:latest
