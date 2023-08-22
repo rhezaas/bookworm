@@ -1,11 +1,6 @@
 name: Bookworm API CI
 
 on:
-  push:
-    branches:
-      - "main"
-    paths:
-      - "api/**"
   workflow_dispatch:
 
 jobs:
@@ -32,5 +27,12 @@ jobs:
           echo ${{ secrets.REGISTRY_PASS }} | docker login ghcr.io -u ${{ secrets.REGISTRY_USER }} --password-stdin
           docker push ghcr.io/rhezaas/bookworm-api:latest
 
-      - name: Remove untagged images
-        run: docker rmi -f $(docker images -f "dangling=true" -q)
+      - name: Push to dokku
+        uses: dokku/github-action@master
+        with:
+          git_remote_url: 'ssh://dokku@103.160.62.181:22/bookworm-api'
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          deploy_docker_image: ghcr.io/rhezaas/bookworm-api:latest
+
+      - name: Cleaner
+        run: docker system prune --force
