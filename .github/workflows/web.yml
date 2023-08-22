@@ -3,7 +3,7 @@ name: Bookworm WEB CI
 on:
   push:
     tags:
-      - 'web:v*'
+      - web/*
 
 jobs:
   deploy:
