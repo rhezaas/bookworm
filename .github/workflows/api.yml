@@ -17,7 +17,7 @@ jobs:
 
       - name: Build and push Docker image
         env:
-          VERSION: ${{ githun.ref }}#refs/tags/
+          VERSION: ${{ github.ref }}#refs/tags/
         run: |
           docker build \
             -f api/dockerfile \
