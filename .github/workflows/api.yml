@@ -1,9 +1,10 @@
 name: Bookworm API CI
+run-name: Deploy API ${{ github.ref_name##* }}
 
 on:
   push:
     tags:
-      - 'api:v*'
+      - 'api/*'
 
 jobs:
   deploy:
@@ -15,11 +16,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - id: split
+        name: Set Version
+        env:
+          REF: ${{ github.ref_name }}
+        run: echo "version=${REF##*/}" >> $GITHUB_OUTPUT
+
       - name: Build and push Docker image
         run: |
           docker build \
             -f api/dockerfile \
-            -t ghcr.io/rhezaas/bookworm-${{ github.ref_name }} \
+            -t ghcr.io/rhezaas/bookworm-${{ steps.split.outputs.version }} \
             --build-arg API_PORT=${{ vars.API_PORT }} \
             --build-arg DB_USER=${{ secrets.DB_USER }} \
             --build-arg DB_PASS=${{ secrets.DB_PASS }} \
@@ -27,14 +34,14 @@ jobs:
             --build-arg DB_NAME=${{ secrets.DB_NAME }} \
             api/
           echo ${{ secrets.REGISTRY_PASS }} | docker login ghcr.io -u ${{ secrets.REGISTRY_USER }} --password-stdin
-          docker push ghcr.io/rhezaas/bookworm-${{ github.ref_name }}
+          docker push ghcr.io/rhezaas/bookworm-${{ steps.split.outputs.version }}
 
       - name: Push to dokku
         uses: dokku/github-action@master
         with:
           git_remote_url: 'ssh://dokku@103.160.62.181:22/bookworm-api'
           ssh_private_key: ${{ secrets.DOKKU_RSA }}
-          deploy_docker_image: ghcr.io/rhezaas/bookworm-${{ github.ref_name }}
+          deploy_docker_image: ghcr.io/rhezaas/bookworm-${{ steps.split.outputs.version }}
           trace: 1
 
       - name: Cleaner
