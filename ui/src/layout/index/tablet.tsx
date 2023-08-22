@@ -4,12 +4,12 @@ import Footer from "bits/footer";
 
 // props
 type Author = {
-    ID: number
+    id: number
     name: string
 }
 
 type Book = {
-    ID: number,
+    id: number,
     name: string,
     slug: string,
     author: Author,

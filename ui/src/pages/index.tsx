@@ -9,11 +9,11 @@ import IndexDesktop from "layout/index/desktop";
 
 // props
 type Book = {
-    ID: number
+    id: number
     name: string
     slug: string
     author: {
-        ID: number
+        id: number
         name: string
     }
     isbn: string
@@ -22,7 +22,7 @@ type Book = {
 }
 
 type Author = {
-    ID: number
+    id: number
     name: string
 }
 
@@ -33,20 +33,22 @@ type Props = {
 
 // functions
 const getBooks = async (): Promise<Book[]> => {
-    const url = 'http://103.160.62.181:8000/product/book';
+    const url = `${process.env.API_HOST}/book`;
     const options = {method: 'GET'};
 
     return fetch(url, options)
         .then(res => res.json())
+        .then(json => json.message)
         .catch(_ => []);
 }
 
 const getAuthors = async (): Promise<Author[]> => {
-    const url = 'http://103.160.62.181:8000/product/author';
+    const url = `${process.env.API_HOST}/author`;
     const options = {method: 'GET'};
 
     return fetch(url, options)
         .then(res => res.json())
+        .then(json => json.message)
         .catch(_ => []);
 }
 

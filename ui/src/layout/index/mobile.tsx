@@ -7,12 +7,12 @@ import BottomNavbar from "bits/bottomNavbar";
 
 // props
 type Author = {
-    ID: number
+    id: number
     name: string
 }
 
 type Book = {
-    ID: number,
+    id: number,
     name: string,
     slug: string,
     author: Author,
@@ -28,7 +28,7 @@ type Props = {
 
 // functions
 
-export default function IndexMobile({books, authors}: PropsWithChildren<Props>) {
+export default function IndexMobile({books}: PropsWithChildren<Props>) {
     return (
         <div className="is-hidden-tablet" style={{overflowX: "hidden"}}>
             {/* header */}
