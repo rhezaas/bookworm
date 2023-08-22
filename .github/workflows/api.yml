@@ -31,12 +31,14 @@ jobs:
           echo ${{ secrets.REGISTRY_PASS }} | docker login ghcr.io -u ${{ secrets.REGISTRY_USER }} --password-stdin
           docker push ghcr.io/rhezaas/bookworm-api:$VERSION
 
-      # - name: Push to dokku
-      #   uses: dokku/github-action@master
-      #   with:
-      #     git_remote_url: 'ssh://dokku@103.160.62.181:22/bookworm-api'
-      #     ssh_private_key: ${{ secrets.DOKKU_RSA }}
-      #     deploy_docker_image: ghcr.io/rhezaas/bookworm-api:latest
+      - name: Push to dokku
+        uses: dokku/github-action@master
+        env:
+          VERSION: ${{ github.ref_name }}
+        with:
+          git_remote_url: 'ssh://dokku@103.160.62.181:22/bookworm-api'
+          ssh_private_key: ${{ secrets.DOKKU_RSA }}
+          deploy_docker_image: ghcr.io/rhezaas/bookworm-api:$VERSION
 
       - name: Cleaner
         run: docker system prune --force
