@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/uptrace/bun"
+	"github.com/uptrace/bun/extra/bundebug"
 	"github.com/uptrace/bun/dialect/pgdialect"
 	"github.com/uptrace/bun/driver/pgdriver"
 )
@@ -33,8 +34,7 @@ func init() {
 	sqldb := sql.OpenDB(pgdriver.NewConnector(pgdriver.WithDSN(dsn)))
 	db := bun.NewDB(sqldb, pgdialect.New())
 
-	// db.AddQueryHook(hook{})
-	// db.AddQueryHook(bundebug.NewQueryHook(bundebug.WithVerbose(true)))
+	db.AddQueryHook(bundebug.NewQueryHook(bundebug.WithVerbose(true)))
 
 	DB = db
 }
