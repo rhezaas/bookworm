@@ -23,11 +23,11 @@ jobs:
           docker build \
             -f api/dockerfile \
             -t ghcr.io/rhezaas/bookworm-api:latest \
-            --build-args API_PORT=${{ secrets.API_PORT }} \
-            --build-args DB_USER=${{ secrets.DB_USER }} \
-            --build-args DB_PASS=${{ secrets.DB_PASS }} \
-            --build-args DB_HOST=${{ secrets.DB_HOST }} \
-            --build-args DB_NAME=${{ secrets.DB_NAME }} \
+            --build-arg API_PORT=${{ secrets.API_PORT }} \
+            --build-arg DB_USER=${{ secrets.DB_USER }} \
+            --build-arg DB_PASS=${{ secrets.DB_PASS }} \
+            --build-arg DB_HOST=${{ secrets.DB_HOST }} \
+            --build-arg DB_NAME=${{ secrets.DB_NAME }} \
             api/
           echo ${{ secrets.REGISTRY_PASS }} | docker login ghcr.io -u ${{ secrets.REGISTRY_USER }} --password-stdin
           docker push ghcr.io/rhezaas/bookworm-api:latest
