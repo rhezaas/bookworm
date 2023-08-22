@@ -31,7 +31,7 @@ jobs:
         uses: dokku/github-action@master
         with:
           git_remote_url: 'ssh://dokku@103.160.62.181:22/bookworm-api'
-          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh_private_key: ${{ secrets.DOKKU_RSA }}
           deploy_docker_image: ghcr.io/rhezaas/bookworm-api:latest
 
       - name: Cleaner
