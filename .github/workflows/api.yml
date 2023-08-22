@@ -1,5 +1,5 @@
 name: Bookworm API CI
-run-name: Deploy API ${{ github.ref_name#api/ }}
+run-name: Deploy ${{ github.ref_name }}
 
 on:
   push:
