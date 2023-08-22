@@ -2,7 +2,7 @@ import { PropsWithChildren } from 'react';
 
 // props
 type Author = {
-    ID: number
+    id: number
     name: string
 }
 
@@ -42,7 +42,7 @@ export default function SideBar({authors, disableLogo}: PropsWithChildren<Props>
                         <a href="/gallery" className="has-text-black-ter"><h1 className="is-size-5 mb-2">Author</h1></a>
                         <ul className="menu-list">
                             {authors.map((author, index) => (
-                                <li key={index}><a href={`localhost:3000/author/${author.name}`}>{author.name}</a></li>
+                                <li key={index}><a href={`${process.env.WEB_HOST}/author/${author.id}`}>{author.name}</a></li>
                             ))}
                         </ul>
                     </aside>

@@ -5,12 +5,12 @@ import Footer from "bits/footer";
 
 // props
 type Author = {
-    ID: number
+    id: number
     name: string
 }
 
 type Book = {
-    ID: number,
+    id: number,
     name: string,
     slug: string,
     author: Author,
@@ -88,7 +88,7 @@ export default function IndexDesktop({books, authors}: PropsWithChildren<Props>)
                                                 <h3 className="has-text-black has-text-weight-semibold">{`Rp. ${book.price}`}</h3>
                                             </div>
                                             <footer className="card-footer">
-                                                <a href={`localhost:3000/book/${book.slug}`} className="card-footer-item">View</a>
+                                                <a href={`${process.env.WEB_HOST}/book/${book.id}`} className="card-footer-item">View</a>
                                             </footer>
                                         </div>
                                     </div>
