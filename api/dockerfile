@@ -8,5 +8,17 @@ RUN go build -gcflags="all=-N -l" -o bin/bookworm-api pkg/main/bookworm.go
 
 FROM docker.io/library/alpine:3.17
 COPY --from=builder /opt/api/bin/bookworm-api /usr/bin/api
+
+ARG API_PORT
+ENV API_PORT=$API_PORT
+ARG DB_USER
+ENV DB_USER=$DB_USER
+ARG DB_PASS
+ENV DB_PASS=$DB_PASS
+ARG DB_HOST
+ENV DB_HOST=$DB_HOST
+ARG DB_NAME
+ENV DB_NAME=$DB_NAME
+
 ENTRYPOINT ["api"]
 EXPOSE 8000
