@@ -1,4 +1,4 @@
-## Book selling web empowered by blockchain
+## Bookworm
 
 This project aims to teach how to create a future web bookstore and sell products using cryptocurrency.
 
